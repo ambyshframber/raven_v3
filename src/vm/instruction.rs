@@ -1,10 +1,9 @@
-use crate::registers::RegisterSelector;
+use super::registers::RegisterSelector;
 use crate::utils::*;
 
 pub mod arithmetic;
 pub mod immupper;
-pub mod load;
-pub mod store;
+pub mod mem;
 
 pub struct Instruction {
     pub opcode: Opcode,
@@ -49,6 +48,17 @@ impl Instruction {
             rs1, rs2, rs3, rd,
             primary_immediate, p
         }
+    }
+}
+#[derive(Copy, Clone)]
+pub struct InsData {
+    pub s1: u32,
+    pub s2: u32,
+    pub s3: u32,
+}
+impl InsData {
+    pub fn new(s1: u32, s2: u32, s3: u32) -> Self {
+        Self { s1, s2, s3 }
     }
 }
 

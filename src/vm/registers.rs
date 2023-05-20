@@ -39,7 +39,7 @@ impl Registers {
             }
             24..=31 => {
                 let set = &self.locals[self.locals.len() - 2];
-                set.shared[rs.0 as usize - 16]
+                set.shared[rs.0 as usize - 24]
             }
             _ => unreachable!()
         }
@@ -60,11 +60,24 @@ impl Registers {
             }
             24..=31 => {
                 let set = &mut self.locals[llen - 2];
-                set.shared[rs.0 as usize - 16] = v
+                set.shared[rs.0 as usize - 24] = v
             }
             _ => unreachable!()
         }
     }
+}
+
+#[test]
+fn santiy() {
+    let mut r = Registers::new();
+    use RegisterSelector as RS;
+    r.write(RS(8), 123);
+    r.call();
+    assert_eq!(r.read(RS(24)), 123);
+
+    r.write(RS(31), 456);
+    r.ret();
+    assert_eq!(r.read(RS(15)), 456);
 }
 
 struct LocalSet {
@@ -78,7 +91,7 @@ impl LocalSet {
 }
 
 /// enforces an invariant
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct RegisterSelector(u8);
 impl RegisterSelector {
     pub fn new(r: u8) -> Option<Self> {

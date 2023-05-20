@@ -1,8 +1,7 @@
 pub fn arithmetic(s1: u32, s2: u32, funct: u32) -> Option<u32> {
     Some(match funct {
         0 => s1.wrapping_add(s2), // add
-        2 => s1.wrapping_sub(s2), // sub
-        3 => s2.wrapping_sub(s1), // ssub
+        2 => s2.wrapping_sub(s1), // sub: s2 - s1. for reg - imm, add a negative immediate
         4 => s1 & s2, // and
         5 => s1 | s2, // or
         6 => s1 ^ s2, // xor
